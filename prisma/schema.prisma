@@ -33,10 +33,11 @@ model Workspace {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  sessions        Session[]
-  operationLogs   OperationLog[]
-  calendarEvents  CalendarEvent[]
+  organization      Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sessions          Session[]
+  operationLogs     OperationLog[]
+  calendarEvents    CalendarEvent[]
+  complianceAnalyses ComplianceAnalysis[]
 
   @@index([organizationId])
   @@map("workspaces")
@@ -53,6 +54,7 @@ model Session {
 
   workspace     Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   operationLogs OperationLog[]
+  complianceAnalyses ComplianceAnalysis[]
 
   @@index([workspaceId])
   @@index([createdAt(sort: Desc)])
