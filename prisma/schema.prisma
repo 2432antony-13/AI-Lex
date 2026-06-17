@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id                  String   @id @default(uuid())
+  name                String
+  legalPerson         String?  @map("legal_person")
+  businessLicense     String?  @map("business_license")
+  icpFilingNo         String?  @map("icp_filing_no")
+  complianceStrategy  Json     @default("{}") @map("compliance_strategy")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  workspaces Workspace[]
+
+  @@map("organizations")
+}
+
+model Workspace {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  productName    String   @map("product_name")
+  productType    String   @map("product_type") // app | miniprogram | web | api
+  industry       String   // ai_marketing | ai_content | ai_companion | ai_education | ai_healthcare | other
+  riskProfile    Json     @default("{}") @map("risk_profile")
+  filingStatus   Json     @default("{}") @map("filing_status")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sessions        Session[]
+  operationLogs   OperationLog[]
+  calendarEvents  CalendarEvent[]
+
+  @@index([organizationId])
+  @@map("workspaces")
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  workspaceId    String   @map("workspace_id")
+  inputSnapshot  Json     @map("input_snapshot")
+  outputType     String   @map("output_type") // risk_brief | review_report | doc_package | mock_filing
+  outputData     Json?    @map("output_data")
+  triggeredRules Json     @default("[]") @map("triggered_rules")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  workspace     Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  operationLogs OperationLog[]
+
+  @@index([workspaceId])
+  @@index([createdAt(sort: Desc)])
+  @@map("sessions")
+}
+
+model OperationLog {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  workspaceId String   @map("workspace_id")
+  sessionId   String?  @map("session_id")
+  actionType  String   @map("action_type") // assess | review | generate | filing | view
+  ruleIds     Json     @default("[]") @map("rule_ids")
+  legalRefs   Json     @default("[]") @map("legal_refs")
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  session   Session?  @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([workspaceId])
+  @@index([createdAt(sort: Desc)])
+  @@map("operation_logs")
+}
+
+model CalendarEvent {
+  id          String   @id @default(uuid())
+  workspaceId String   @map("workspace_id")
+  title       String
+  description String?
+  eventType   String   @map("event_type") // filing_deadline | regulatory_update | todo | milestone
+  dueDate     DateTime @map("due_date")
+  status      String   @default("pending") // pending | completed | overdue
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@map("calendar_events")
+}
+
+// ========== 法律法规数据库 ==========
+
+model Regulatory {
+  id              String   @id @default(uuid())
+  title           String                        // 法规名称
+  shortTitle      String?  @map("short_title")  // 简称
+  documentNumber  String?  @map("document_number") // 文号
+  issuingBody     String   @map("issuing_body")    // 发布机关
+  lawType         String   @map("law_type")        // 法规类别: law | administrative_regulation | departmental_rule | judicial_interpretation
+  legalLevel      String   @map("legal_level")     // 效力级别: constitution | law | regulation | rule | normative
+  publishDate     DateTime @map("publish_date")
+  effectiveDate   DateTime @map("effective_date")
+  amendmentDate   DateTime? @map("amendment_date")  
+  status          String   @default("effective")   // effective | amended | repealed | draft
+  category        String   @default("general")     // 领域分类: ai | data_privacy | cybersecurity | consumer | advertising | criminal | intellectual_property
+  keywords        String[] @default([])            // 主题词标签
+  fullText        String?                          // 全文（Markdown），小法规直接存，大法规仅存关键章节
+  summary         String?                          // 要点摘要
+  penaltyRefs     Json     @default("[]")          // 处罚条款引用 [{article, penalty_type, penalty_detail}]
+  version         Int      @default(1)
+
+  articles        RegulatoryArticle[]
+
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([category])
+  @@index([effectiveDate])
+  @@map("regulations")
+}
+
+model RegulatoryArticle {
+  id            String   @id @default(uuid())
+  regulationId  String   @map("regulation_id")
+  articleOrder  Int      @map("article_order")    // 条款序号
+  articleNumber String   @map("article_number")   // 条款编号，如"第4条"、"第13条"
+  title         String?                           // 条款标题（如有）
+  content       String                            // 条款全文
+  obligations   Json     @default("[]")            // 义务类型标签: [{type: "mandatory"|"prohibitive"|"conditional", target: "...", trigger_kws: [...]}]
+  penalty       Json?                             // 对应罚则: {type, description, statutory_penalty}
+  keywords      String[] @default([])             // 关键词
+
+  regulation    Regulatory @relation(fields: [regulationId], references: [id], onDelete: Cascade)
+
+  @@index([regulationId])
+  @@index([articleOrder])
+  @@map("regulatory_articles")
+}
+
+// ========== 合规分析记录 ==========
+
+model ComplianceAnalysis {
+  id              String   @id @default(uuid())
+  workspaceId     String   @map("workspace_id")
+  sessionId       String?  @map("session_id")
+  analysisType    String   @map("analysis_type")  // risk_assessment | compliance_review | deep_analysis
+  inputData       Json     @map("input_data")     // 输入快照
+  matchedArticles Json     @default("[]") @map("matched_articles") // 匹配到的法规条款 ID 列表
+  riskScore       Float    @default(0) @map("risk_score")          // 综合风险评分 0-100
+  riskLevel       String   @default("low") @map("risk_level")      // low | medium | high | critical
+  findings        Json     @default("[]")                          // 分析发现列表
+  summary         String?                                          // 分析摘要
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  session   Session?  @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([createdAt(sort: Desc)])
+  @@map("compliance_analyses")
+}
