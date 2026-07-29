@@ -74,3 +74,10 @@ backup/
 extracted_texts/
 *.bat
 setup.bat
+*.tsbuildinfo
+*.docx
+*.xlsx
+~$*
+_mineru_test/
+.workbuddy/
+.audit-*.png
