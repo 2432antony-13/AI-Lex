@@ -35,3 +35,7 @@ npm run dev
 ## 项目边界
 
 本仓库验证的是法律知识工程与 AI 辅助分析的组合方式。规则匹配结果、模型生成内容和文档草案均应由具备相应法域经验的专业人员复核。
+
+## 项目管理
+
+[项目章程](PROJECT.md) · [协作规则](AGENTS.md) · [工作流](docs/WORKFLOW.md) · [基线](docs/governance/BASELINE.md) · [验收](docs/governance/QUALITY.md) · [资产](docs/governance/ASSETS.md) · [交接](docs/governance/HANDOVER.md)
