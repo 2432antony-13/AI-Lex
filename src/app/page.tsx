@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -71,7 +72,7 @@ export default function Home() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen grain relative">
+    <Localize><div className="min-h-screen grain relative">
       {/* Warm ambient blobs */}
       <div className="fixed top-[-100px] right-[-100px] w-[500px] h-[500px] bg-brand-200/[0.12] rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-80px] left-[260px] w-[400px] h-[400px] bg-amber-200/[0.10] rounded-full blur-[100px] pointer-events-none" />
@@ -97,7 +98,7 @@ export default function Home() {
             回答 10 个问题，自动识别合规风险 → 生成评审单 → 一键输出文档包。
             <br />
             用产品化手段帮创业团队
-            <span className="text-brand-600 font-semibold">「偷出」三个月的时间差</span>。
+            <span className="text-brand-600 font-semibold">更早开展合规准备</span>。
           </p>
         </section>
 
@@ -107,7 +108,7 @@ export default function Home() {
             <h2 className="text-xs font-bold text-brand-600 tracking-wider uppercase">⚡ 快速演示</h2>
             <div className="flex-1 section-line" />
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {demoScenarios.map((s) => (
               <Link
                 key={s.key}
@@ -138,7 +139,7 @@ export default function Home() {
             <h2 className="text-xs font-bold text-brand-600 tracking-wider uppercase">🧭 合规工作台</h2>
             <div className="flex-1 section-line" />
           </div>
-          <div className="grid grid-cols-4 gap-4 stagger-children">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
             {moduleCards.map((card) => (
               <Link
                 key={card.id}
@@ -191,7 +192,7 @@ export default function Home() {
             <div className="flex-1 section-line" />
             <span className="text-[10px] text-surface-400 tracking-wider">DeepSeek V4 Pro · 自有法规知识体系</span>
           </div>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((s) => (
               <div key={s.label} className="warm-card p-5 text-center group">
                 <div className={`text-3xl font-extrabold ${s.color} mb-1`}>
@@ -228,7 +229,7 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <div className="text-right text-[10px] text-red-400/70 mt-2 font-medium">损失 3+ 个月</div>
+                <div className="text-right text-[10px] text-red-400/70 mt-2 font-medium">可能延误</div>
               </div>
 
               {/* Divider */}
@@ -241,7 +242,7 @@ export default function Home() {
                   Lex 路径 — 合规与开发并行
                 </div>
                 <div className="flex items-center gap-1.5">
-                  {["Day 1 风险识别", "Mock 材料并行", "代码 + 合规同步", "开发完 = 可上线"].map((step, i) => (
+                  {["Day 1 风险识别", "Mock 材料并行", "代码 + 合规同步", "评估上线准备情况"].map((step, i) => (
                     <div key={i} className="flex items-center gap-1.5 flex-1">
                       <div className="flex-1 py-2 px-2 rounded-xl bg-brand-50/80 border border-brand-200/50 text-[10px] text-brand-700 text-center truncate font-medium">
                         {step}
@@ -250,7 +251,7 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <div className="text-right text-[10px] text-brand-500/70 mt-2 font-medium">0 天延误 🎯</div>
+                <div className="text-right text-[10px] text-brand-500/70 mt-2 font-medium">提前准备 🎯</div>
               </div>
             </div>
           </div>
@@ -266,6 +267,6 @@ export default function Home() {
           </p>
         </footer>
       </div>
-    </div>
+    </div></Localize>
   );
 }

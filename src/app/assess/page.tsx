@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import { useState } from "react";
 import { demoScenarios, type ScenarioKey } from "@/lib/demo-scenarios";
@@ -98,7 +99,7 @@ export default function AssessPage() {
   };
 
   return (
-    <main className="min-h-screen">
+    <Localize><main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Intro */}
         {step === 0 && (
@@ -107,7 +108,7 @@ export default function AssessPage() {
             <p className="text-gray-600 mb-2">PART A · 回答 10 题，系统自动追问并生成风险简报</p>
             <p className="text-xs text-gray-400 mb-8 flex items-center gap-1">⚡ 提交后将根据你的回答动态追加 2-3 道针对性追问</p>
 
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
               {Object.entries(demoScenarios).map(([key, s]) => (
                 <button key={key} onClick={() => loadScenario(key as ScenarioKey)}
                   className="p-4 rounded-xl bg-white border border-gray-200 text-left hover:border-brand-500 hover:shadow-md transition-all">
@@ -299,6 +300,6 @@ export default function AssessPage() {
           </div>
         )}
       </div>
-    </main>
+    </main></Localize>
   );
 }

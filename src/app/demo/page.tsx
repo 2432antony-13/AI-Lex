@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import { useState, useCallback } from "react";
 
@@ -229,16 +230,16 @@ const LIFECYCLE_COLORS: Record<string, string> = {
 
 function Spinner({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-3 py-4">
+    <Localize><div className="flex items-center gap-3 py-4">
       <div className="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
       <span className="text-sm text-surface-500">{text}</span>
-    </div>
+    </div></Localize>
   );
 }
 
 function StepBadge({ step, label, active, done }: { step: number; label: string; active: boolean; done: boolean }) {
   return (
-    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+    <Localize><div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
       done ? "bg-green-50 text-green-700 border border-green-200" :
       active ? "bg-brand-100 text-brand-700 border border-brand-200" :
       "bg-gray-100 text-gray-400 border border-gray-200"
@@ -249,7 +250,7 @@ function StepBadge({ step, label, active, done }: { step: number; label: string;
         {done ? "✓" : step}
       </span>
       {label}
-    </div>
+    </div></Localize>
   );
 }
 
@@ -451,7 +452,7 @@ export default function DemoPage() {
   };
 
   return (
-    <div className="min-h-screen grain relative">
+    <Localize><div className="min-h-screen grain relative">
       {/* Ambient blobs */}
       <div className="fixed top-[-80px] right-[-80px] w-[400px] h-[400px] bg-brand-200/[0.10] rounded-full blur-[100px] pointer-events-none" />
       <div className="fixed bottom-[-60px] left-[260px] w-[350px] h-[350px] bg-amber-200/[0.08] rounded-full blur-[90px] pointer-events-none" />
@@ -666,7 +667,7 @@ export default function DemoPage() {
             {/* Feature Extraction */}
             <div className="warm-card p-5">
               <h2 className="text-sm font-bold text-[#2d2117] mb-3">🔍 AI 特征提取</h2>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                 {Object.entries(llmResult.features).map(([key, val]) => {
                   const labelMap: Record<string, string> = {
                     hasGenerativeAI: "生成式AI", aiTechPath: "技术路径", productForm: "产品形态",
@@ -676,10 +677,10 @@ export default function DemoPage() {
                   };
                   const valStr = typeof val === "boolean" ? (val ? "✅" : "❌") : String(val);
                   return (
-                    <div key={key} className="p-2 rounded-lg bg-surface-50 border border-surface-200">
+                    <Localize><div key={key} className="p-2 rounded-lg bg-surface-50 border border-surface-200">
                       <div className="text-[10px] text-surface-400">{labelMap[key] || key}</div>
                       <div className="text-xs font-semibold text-surface-700 mt-0.5">{valStr}</div>
-                    </div>
+                    </div></Localize>
                   );
                 })}
               </div>
@@ -812,7 +813,7 @@ export default function DemoPage() {
                   {REGULATIONS.map((reg) => {
                     const isExpanded = expandedReg === reg.id;
                     return (
-                      <div key={reg.id}>
+                      <Localize><div key={reg.id}>
                         <div
                           onClick={() => setExpandedReg(isExpanded ? null : reg.id)}
                           className={`p-3 rounded-xl border cursor-pointer transition-all hover:shadow-sm ${reg.color} ${isExpanded ? "shadow-sm" : ""}`}
@@ -883,7 +884,7 @@ export default function DemoPage() {
                             ))}
                           </div>
                         )}
-                      </div>
+                      </div></Localize>
                     );
                   })}
                 </div>
@@ -915,7 +916,7 @@ export default function DemoPage() {
               </h2>
 
               {/* Key Risk Distribution */}
-              <div className="grid grid-cols-4 gap-2 mb-5">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-5">
                 {(["critical", "high", "medium", "low"] as const).map((level) => (
                   <div key={level} className={`p-3 rounded-xl border ${RISK_COLORS[level]} text-center`}>
                     <div className="text-lg font-extrabold">{result.report.summary[level]}</div>
@@ -1014,7 +1015,7 @@ export default function DemoPage() {
                   ) : (
                     <div className="text-xs text-surface-400 p-3 bg-gray-50 rounded-lg">
                       <div className="mb-2 font-medium text-surface-500">图结构概览</div>
-                      <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
                         <div className="p-2 bg-white rounded border">
                           <div className="text-lg font-bold text-brand-600">{result.graphTrace.totalNodes}</div>
                           <div className="text-[10px] text-surface-400">节点</div>
@@ -1078,6 +1079,6 @@ export default function DemoPage() {
           </div>
         )}
       </div>
-    </div>
+    </div></Localize>
   );
 }

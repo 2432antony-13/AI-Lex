@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -72,7 +73,7 @@ function ReviewForm() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <Localize><main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
         <a href="/" className="text-lg font-bold text-gray-900">AI Lex</a>
         <span className="text-sm text-gray-500">PART B1 · 国内合规评审</span>
@@ -281,7 +282,7 @@ function ReviewForm() {
             </div>
 
             {/* Summary */}
-            <div className="grid grid-cols-4 gap-3 mb-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
               {[
                 { label: "风险项", value: result.summary.total, color: "text-gray-700" },
                 { label: "高风险", value: result.summary.high, color: "text-red-600" },
@@ -363,14 +364,14 @@ function ReviewForm() {
           </div>
         )}
       </div>
-      </main>
+      </main></Localize>
   );
 }
 
 export default function ReviewPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen text-gray-500">加载中...</div>}>
+    <Localize><Suspense fallback={<div className="flex items-center justify-center min-h-screen text-gray-500">加载中...</div>}>
       <ReviewForm />
-    </Suspense>
+    </Suspense></Localize>
   );
 }
