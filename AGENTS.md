@@ -7,5 +7,5 @@
 - CI 使用 Node 20：`npm ci`、`npm run build`，并设置 FEATURE_AUTH、FEATURE_PERSIST、FEATURE_LLM 为 false。根 package 未提供 test/lint；`src/lib/agents/__test__.ts` 是打印示例，不能记为断言评测。数据库 push/migrate 具有数据影响，不能当通用检查运行。
 - 行为改变覆盖原失败条件；文档改动检查事实、链接和差异。未知结果不得填“通过”。
 - 缺失事实应显式保留；模型生成与规则匹配均需可查依据；中国规则与 DataTrace HK/SG 数据不得直接混用。
-- 任务状态用一个 status 标签，阻塞单列；PR 引用任务。合并、部署、用户验收分别记录，不自动关闭尚未满足交付验收的任务。
+- 任务状态统一在[私有管理看板](https://github.com/users/2432antony-13/projects/1)的 Status 字段维护，阻塞使用 Blocked / Blocker 字段；Issue 正文保留验收与解除条件。旧 status/blocked 标签停止作为状态源。 PR 引用任务。合并、部署、用户验收分别记录，不自动关闭尚未满足交付验收的任务。
 - 交接保留来源 SHA、命令/运行、输入输出范围、限制和下一动作。自查不称独立批准。
