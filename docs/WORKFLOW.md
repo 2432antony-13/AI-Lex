@@ -8,7 +8,7 @@
 
 ## 变更与检查
 
-沿用 `main` 和短任务分支；PR 说明具体行为/文档变化、关联 Issue、验证对象与未覆盖项。自查记录真实实施者，独立批准人数不虚构。CI 使用 Node 20：`npm ci`、`npm run build`，并设置 FEATURE_AUTH、FEATURE_PERSIST、FEATURE_LLM 为 false。根 package 未提供 test/lint；`src/lib/agents/__test__.ts` 是打印示例，不能记为断言评测。数据库 push/migrate 具有数据影响，不能当通用检查运行。
+沿用 `main` 和短任务分支；PR 说明具体行为/文档变化、关联 Issue、验证对象与未覆盖项。自查记录真实实施者，独立批准人数不虚构。CI 使用 Node 20：`npm ci`、`npm run build`，并设置 FEATURE_AUTH、FEATURE_PERSIST、FEATURE_LLM 为 false。npm test 覆盖合规规则与语言解析；尚无独立 lint；`src/lib/agents/__test__.ts` 是打印示例，不能记为断言评测。数据库 push/migrate 具有数据影响，不能当通用检查运行。
 
 平台状态与运行见 [基线](governance/BASELINE.md)，产品用例见 [质量矩阵](governance/QUALITY.md)。必要检查应采用实际成功的 job 名，先运行再设置；通过 PR 的约定和平台阻断分别核验。DataTrace 等自动写入主分支的流程须先设计衔接再开启全面 PR 限制。
 

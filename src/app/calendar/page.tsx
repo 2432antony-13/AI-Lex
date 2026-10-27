@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import { useState, useMemo } from "react";
 import { useWorkspace } from "@/lib/workspace-context";
@@ -100,7 +101,7 @@ export default function CalendarPage() {
   const selectedEvents = selectedDate ? eventsByDate[selectedDate] || [] : [];
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
+    <Localize><div className="max-w-4xl mx-auto px-6 py-10">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -153,7 +154,7 @@ export default function CalendarPage() {
         <div className="grid grid-cols-7">
           {daysInMonth.map((day, idx) => {
             if (day === null) {
-              return <div key={`empty-${idx}`} className="min-h-[110px] border-b border-r border-gray-100 bg-gray-50/50" />;
+              return <Localize><div key={`empty-${idx}`} className="min-h-[110px] border-b border-r border-gray-100 bg-gray-50/50" /></Localize>;
             }
             const dateStr = formatDate(day);
             const dayEvents = eventsByDate[dateStr] || [];
@@ -161,7 +162,7 @@ export default function CalendarPage() {
             const hasEvents = dayEvents.length > 0;
 
             return (
-              <div
+              <Localize><div
                 key={dateStr}
                 className={`min-h-[110px] border-b border-r border-gray-100 p-2 cursor-pointer transition-all relative group ${
                   today ? "bg-brand-50/50" : hasEvents ? "bg-yellow-50/60" : "hover:bg-gray-50"
@@ -228,7 +229,7 @@ export default function CalendarPage() {
                     <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-r border-b border-gray-200 rotate-45" />
                   </div>
                 )}
-              </div>
+              </div></Localize>
             );
           })}
         </div>
@@ -263,6 +264,6 @@ export default function CalendarPage() {
           </div>
         </div>
       )}
-    </div>
+    </div></Localize>
   );
 }

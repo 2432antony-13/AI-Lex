@@ -1,3 +1,5 @@
+<p><img src="../assets/tony.gif" width="112" height="112" alt="Tony 24 · AI-Lex"></p>
+
 [简体中文](../../README.md) · [繁體中文](../../docs/i18n/README.zh-TW.md) · **English**
 
 # AI-Lex
@@ -32,4 +34,6 @@ A missing deployment region must remain unknown. Legal sources, applicability an
 
 [Source](../../src/) · [Docs](../../docs/README.md)
 
-Repository homepages and usage entry points are available in three languages. Product interface coverage is tracked separately; documentation translation does not imply full product localization.
+The repository homepage and product interface offer **简体中文 / 繁體中文 / English**. The **Tony 24** mascot uses GIF on GitHub and SVG/CSS in the product.
+
+[Language coverage and original content](../LOCALIZATION.md)

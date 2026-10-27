@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import { useWorkspace } from "@/lib/workspace-context";
 
@@ -35,7 +36,7 @@ export default function HistoryPage() {
   const sessions = MOCK_SESSIONS[workspace.id] || [];
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
+    <Localize><div className="max-w-5xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">历史记录</h1>
@@ -72,6 +73,6 @@ export default function HistoryPage() {
           <a href="/assess" className="text-brand-600 text-sm hover:underline">开始第一次风险评估 →</a>
         </div>
       )}
-    </div>
+    </div></Localize>
   );
 }

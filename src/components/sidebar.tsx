@@ -1,5 +1,7 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
+import { LanguageSelector } from "@/lib/i18n/provider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,13 +19,11 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[260px] bg-surface-0/90 backdrop-blur-xl border-r border-surface-300/40 flex flex-col z-50">
+    <Localize><aside className="sticky md:fixed left-0 top-0 md:bottom-0 w-full md:w-[260px] bg-surface-0/90 backdrop-blur-xl border-r border-surface-300/40 flex flex-col z-50">
       {/* Logo */}
       <div className="px-6 py-6 border-b border-surface-300/30">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center text-white font-bold text-sm shadow-md shadow-brand-500/15 group-hover:shadow-brand-500/25 transition-shadow">
-            Lx
-          </div>
+          <img src="/tony.svg" alt="Tony 24" width="48" height="48" className="shrink-0" />
           <div>
             <div className="font-bold text-[15px] text-[#2d2117] tracking-tight">
               星链 <span className="gradient-brand-text">AI Lex</span>
@@ -35,16 +35,17 @@ export default function Sidebar() {
         </Link>
       </div>
 
+      <LanguageSelector />
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex md:block flex-1 px-3 py-2 md:space-y-1 overflow-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link
+            <Localize key={item.href}><Link
               key={item.href}
               href={item.href}
               className={`
-                group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative
+                group flex shrink-0 items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative
                 ${isActive
                   ? "bg-brand-100/60 text-brand-700 shadow-sm"
                   : "text-[#6b5c4f] hover:text-[#2d2117] hover:bg-surface-200/50"
@@ -61,13 +62,13 @@ export default function Sidebar() {
               {isActive && (
                 <div className="absolute left-0 w-[3px] h-5 rounded-r-full gradient-brand" />
               )}
-            </Link>
+            </Link></Localize>
           );
         })}
       </nav>
 
       {/* Workspace Info */}
-      <div className="px-4 py-4 border-t border-surface-300/30">
+      <div className="hidden md:block px-4 py-4 border-t border-surface-300/30">
         <div className="bg-white/80 border border-surface-300/30 p-3 rounded-xl shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-brand-100 flex items-center justify-center text-xs">
@@ -80,6 +81,6 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-    </aside>
+    </aside></Localize>
   );
 }

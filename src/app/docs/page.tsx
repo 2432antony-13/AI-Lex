@@ -1,4 +1,5 @@
 "use client";
+import { Localize } from "@/lib/i18n/provider";
 
 import { useState } from "react";
 import { useWorkspace } from "@/lib/workspace-context";
@@ -76,7 +77,7 @@ export default function DocsPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
+    <Localize><div className="max-w-5xl mx-auto px-6 py-10">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">文档中心</h1>
       <p className="text-gray-500 mb-8">PART C — 上线合规文档与备案模板生成</p>
 
@@ -85,7 +86,7 @@ export default function DocsPage() {
         <h2 className="text-xl font-bold text-gray-900 mb-2">C1 · 前台法律文本</h2>
         <p className="text-sm text-gray-500 mb-6">选择需要生成的文档，系统自动填充产品信息</p>
 
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
           {docTypes.map((dt) => (
             <label
               key={dt.id}
@@ -134,7 +135,7 @@ export default function DocsPage() {
                 {selectedTypes.map((t) => {
                   const dt = docTypes.find((d) => d.id === t)!;
                   return (
-                    <button
+                    <Localize><button
                       key={t}
                       onClick={() => setActiveDocTab(t)}
                       className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
@@ -142,7 +143,7 @@ export default function DocsPage() {
                       }`}
                     >
                       {dt.name}
-                    </button>
+                    </button></Localize>
                   );
                 })}
               </div>
@@ -174,7 +175,7 @@ export default function DocsPage() {
             <p className="text-sm text-gray-600 mt-1 mb-4">
               基于产品信息自动生成 Mock 备案材料包，包含系统架构说明书、算法自评估报告、备案承诺书。
               <br />
-              <span className="text-brand-600 font-medium">在代码没写完时就能拿材料去跑备案流程，帮你「偷出」3 个月时间差。</span>
+              <span className="text-brand-600 font-medium">准备草案与开发并行；备案要求和时间仍需核实。</span>
             </p>
             <button
               onClick={handleGenerateFiling}
@@ -266,6 +267,6 @@ export default function DocsPage() {
           </div>
         </div>
       )}
-    </div>
+    </div></Localize>
   );
 }
