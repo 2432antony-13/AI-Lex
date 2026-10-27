@@ -10,7 +10,8 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test": "tsc --module commonjs --target ES2022 --moduleResolution node --esModuleInterop --skipLibCheck --outDir .test-build src/lib/compliance-engine.ts && node --test scripts/compliance.test.cjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

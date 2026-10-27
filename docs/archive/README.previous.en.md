@@ -1,4 +1,4 @@
-<p align="right"><a href="./README.md">简体中文</a> | <strong>English</strong></p>
+<p align="right"><a href="../../README.md">简体中文</a> | <strong>English</strong></p>
 
 # AI-Lex
 
@@ -29,8 +29,8 @@ Open [http://localhost:3000](http://localhost:3000). All feature flags are disab
 
 ## Research notes
 
-- [System architecture](./docs/architecture.en.md)
-- [Auditable compliance methodology](./docs/methodology.en.md)
+- [System architecture](../architecture.en.md)
+- [Auditable compliance methodology](../methodology.en.md)
 
 ## Scope
 

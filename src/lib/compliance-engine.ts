@@ -55,7 +55,7 @@ export interface ComplianceFeatures {
   /** 内容类型 */
   contentType: "text" | "image" | "video" | "audio" | "code" | "mixed" | "unknown";
   /** 部署区域 */
-  deploymentRegion: "cn" | "cn_and_hk" | "overseas" | "cross_border";
+  deploymentRegion: "cn" | "cn_and_hk" | "overseas" | "cross_border" | "unknown";
   /** 商业模式 */
   businessModel: "free" | "paid" | "freemium" | "b2b" | "unknown";
 }
@@ -78,6 +78,8 @@ export interface ComplianceReport {
   /** 综合分析 */
   conclusion: ConclusionType;
   conclusionText: string;
+  /** Missing facts must not be silently inferred as a jurisdiction. */
+  missingFacts: string[];
   riskLevel: RiskLevel;
   riskScore: number; // 0-100
 
@@ -220,12 +222,16 @@ export function extractFeatures(input: {
   if (/代码|编程/.test(allText)) contentType = "code";
   if (/文案|图片|视频|文本|图像/.test(allText).toString().match(/true/g)?.length ?? 0 > 1) contentType = "mixed";
 
-  // 部署区域
-  let deploymentRegion: ComplianceFeatures["deploymentRegion"] = "cn";
-  if (/跨境|海外|境外|国外|global/.test(allText)) {
-    if (/香港|HK|澳门/.test(allText)) deploymentRegion = "cn_and_hk";
-    else deploymentRegion = "cross_border";
-  }
+  // Only an explicit supported region establishes jurisdiction; free text may
+  // mention a place as background and must not fill a missing deployment fact.
+  const region = input.deploymentRegion?.trim().toLowerCase();
+  const regionAliases: Record<string, ComplianceFeatures["deploymentRegion"]> = {
+    cn: "cn", "中国大陆": "cn", "中国": "cn", "中国内地": "cn", "中国境内": "cn",
+    cn_and_hk: "cn_and_hk", "中国大陆及香港": "cn_and_hk", "中国大陆 + 香港": "cn_and_hk",
+    overseas: "overseas", "海外": "overseas", "境外": "overseas",
+    cross_border: "cross_border", "跨境": "cross_border",
+  };
+  const deploymentRegion = region ? (regionAliases[region] ?? "unknown") : "unknown";
 
   // 商业模式
   let businessModel: ComplianceFeatures["businessModel"] = "unknown";
@@ -574,7 +580,13 @@ export function generateComplianceReport(
   const { score, level, breakdown } = calculateRiskScore(matches);
 
   // 4. 评审结论
-  const { conclusion, text: conclusionText } = determineConclusion(level, matches);
+  const missingFacts = features.deploymentRegion === "unknown" ? ["deploymentRegion"] : [];
+  const determined = determineConclusion(level, matches);
+  const conclusion = missingFacts.length && determined.conclusion === "approved"
+    ? "conditional" : determined.conclusion;
+  const conclusionText = missingFacts.length
+    ? "部署区域缺失或无法识别。请补充法域事实后重新分析；以下仅为候选规则，不构成放行结论。"
+    : determined.text;
 
   // 5. 四维分解
   const dimensions: Record<RiskDimension, { level: Severity; findings: number; detail: string[] }> = {
@@ -650,6 +662,7 @@ export function generateComplianceReport(
   return {
     conclusion,
     conclusionText,
+    missingFacts,
     riskLevel: level,
     riskScore: Math.round(score),
 
